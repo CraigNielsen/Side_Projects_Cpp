@@ -22,7 +22,7 @@ using namespace std;
 using namespace dlib;
 
 // Our data will be 2-dimensional data. So declare an appropriate type to contain these points.
-typedef matrix<double,2,1> sample_type;
+typedef matrix<double,12,1> sample_type;
 
 // ----------------------------------------------------------------------------------------
 
@@ -117,8 +117,20 @@ int main()
         // Next, if you wanted to obtain the decision rule learned by a one_vs_one_trainer you
         // would store it into a one_vs_one_decision_function.
         one_vs_one_decision_function<ovo_trainer> df = trainer.train(samples, labels);
-
-        cout << "predicted label: "<< df(samples[0])  << ", true label: "<< labels[0] << endl;
+        sample_type m;
+        m(0)=0;
+        m(1)=255;
+        m(2)=255;
+        m(3)=0;
+        m(4)=255;
+        m(5)=0;
+        m(6)=0;
+        m(7)=255;
+        m(8)=0;
+        m(9)=255;
+        m(10)=255;
+        m(11)=0;
+        cout << "predicted label: "<< df(m)  << ", true label: "<< 1 << endl;
         cout << "predicted label: "<< df(samples[90]) << ", true label: "<< labels[90] << endl;
         // The output is:
         /*
@@ -198,12 +210,23 @@ void generate_data (
     double radius = 0.5;
     for (long i = 0; i < num+10; ++i)
     {
-        double sign = 1;
-        if (rnd.get_random_double() < 0.5)
-            sign = -1;
-        m(0) = 2*radius*rnd.get_random_double()-radius;
-        m(1) = sign*sqrt(radius*radius - m(0)*m(0));
-
+//        double sign = 1;
+//        if (rnd.get_random_double() < 0.5)
+//            sign = -1;
+//        m(0) = 2*radius*rnd.get_random_double()-radius;
+//        m(1) = sign*sqrt(radius*radius - m(0)*m(0));
+        m(0)=0;
+        m(1)=255;
+        m(2)=255;
+        m(3)=0;
+        m(4)=255;
+        m(5)=0;
+        m(6)=0;
+        m(7)=255;
+        m(8)=0;
+        m(9)=255;
+        m(10)=255;
+        m(11)=0;
         // add this sample to our set of training samples
         samples.push_back(m);
         labels.push_back(1);
@@ -213,12 +236,23 @@ void generate_data (
     radius = 10.0;
     for (long i = 0; i < num+20; ++i)
     {
-        double sign = 1;
-        if (rnd.get_random_double() < 0.5)
-            sign = -1;
-        m(0) = 2*radius*rnd.get_random_double()-radius;
-        m(1) = sign*sqrt(radius*radius - m(0)*m(0));
-
+//        double sign = 1;
+//        if (rnd.get_random_double() < 0.5)
+//            sign = -1;
+//        m(0) = 2*radius*rnd.get_random_double()-radius;
+//        m(1) = sign*sqrt(radius*radius - m(0)*m(0));
+        m(0)=0;
+        m(1)=0;
+        m(2)=0;
+        m(3)=0;
+        m(4)=255;
+        m(5)=255;
+        m(6)=255;
+        m(7)=255;
+        m(8)=255;
+        m(9)=255;
+        m(10)=255;
+        m(11)=0;
         // add this sample to our set of training samples
         samples.push_back(m);
         labels.push_back(2);
@@ -228,15 +262,26 @@ void generate_data (
     radius = 4.0;
     for (long i = 0; i < num+30; ++i)
     {
-        double sign = 1;
-        if (rnd.get_random_double() < 0.5)
-            sign = -1;
-        m(0) = 2*radius*rnd.get_random_double()-radius;
-        m(1) = sign*sqrt(radius*radius - m(0)*m(0));
-
+//        double sign = 1;
+//        if (rnd.get_random_double() < 0.5)
+//            sign = -1;
+//        m(0) = 2*radius*rnd.get_random_double()-radius;
+//        m(1) = sign*sqrt(radius*radius - m(0)*m(0));
+        m(0)=0;
+        m(1)=0;
+        m(2)=255;
+        m(3)=0;
+        m(4)=0;
+        m(5)=255;
+        m(6)=0;
+        m(7)=255;
+        m(8)=255;
+        m(9)=255;
+        m(10)=255;
+        m(11)=255;
         // translate this point away from the origin
-        m(0) += 25;
-        m(1) += 25;
+//        m(0) += 25;
+//        m(1) += 25;
 
         // add this sample to our set of training samples
         samples.push_back(m);
