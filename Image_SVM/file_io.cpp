@@ -11,6 +11,7 @@ map<string,int> file_IO::getDirectoryFiles(char* dir, unordered_multimap<string,
     method to console print the values.
 
     */
+    // create a directory iterator
     QDirIterator it(dir ,QDir::Files, QDirIterator::Subdirectories);
     string currentfolder="";
     string file;
@@ -39,10 +40,9 @@ map<string,int> file_IO::getDirectoryFiles(char* dir, unordered_multimap<string,
             }
         }
 }
-    if (printout_){cout<<"no. of classes: "<<foldercount<<endl;
-    cout<<"no. of files: "<<filecount<<endl;}
+    if (printout_){cout<<"no. of classes: "<<foldercount<<endl;  cout<<"no. of files: "<<filecount<<endl;}
     //find image area
-    string loc = path+file;
+//    string loc = path+file;
     Mat test=imread(path+"/"+file);
     int area=test.cols*test.rows;
     int channels=test.channels();

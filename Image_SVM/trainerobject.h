@@ -47,7 +47,8 @@ public:
     trainerObject();
     Mat &getTrainingMat();
     Mat &getLabelMat();
-    void process();
+    void process3C();
+    void process1C();
     void convertImageToRow(Mat &src_, int size);
     string getClass(int i, bool ShowAllClasses= false);
     void initialize(int image_channels, int classes);

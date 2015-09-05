@@ -29,8 +29,8 @@ int main()
     */
 
     ///SETUP
-    trainerObject t=trainerObject("/home/craig/QT/scripts/training/",true);
-//    t.process();
+    trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROI",true);
+    t.process1C();
 //    t.io.print(t.labelnm);
 //    Mat proc=imread("/home/craig/QT/scripts/training/50/1.jpg");
 
