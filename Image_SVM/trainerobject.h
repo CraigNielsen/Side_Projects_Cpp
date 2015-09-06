@@ -12,7 +12,13 @@
  #include <boost/archive/text_iarchive.hpp>
  #include <string>
  #include <fstream>
+#include <dlib/svm_threaded.h>
+#include <iostream>
+#include <vector>
+#include <dlib/rand.h>
 
+
+//using namespace dlib;
 using namespace cv;
 using namespace std;
 #include <string>
@@ -29,17 +35,21 @@ class trainerObject
     };
 
 public:
+    //===============================       SETTINGS
+    static const int tImageCols=25;
+
+    //++++++++++++++++++++++++++++++++++++++++++++++
     umm_dirs umm_dir;
     file_IO io;
     Mat training_Data,featureRowSize;
     Mat label_Matrix;
     std::vector< float > labelArray;
     int lar[];
-    vector <Pair> labelnames;
-    map <int ,string > labelnm;
+    std::vector <Pair> labelnames;
+    std::map <int ,string > labelnm;
     string currentFolder="defaultsFolder__";
     string folder;
-    map <string,int> info;
+    std::map <string,int> info;
     int imageSize;//area of the training images (rows * colums)
     int fileNumber=-1;
 
@@ -56,6 +66,9 @@ public:
     void get1DFeatureRow(string path, Mat &dest, int row_to_change);
     void save(string dir_);
     void makeFeatureRow(Mat &src_, Mat &dest_);
+    void multiclassTrain();
+    void printoutMatrix(Mat & in_);
+    void convertMat2Dlib(Mat & src_, std::vector<dlib::matrix<double,tImageCols,1>> & dst);
 private:
 
     char* dir;

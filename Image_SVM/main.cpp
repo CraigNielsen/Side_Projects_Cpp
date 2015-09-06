@@ -11,6 +11,8 @@
 #include <iostream>
 #include <boost/serialization/map.hpp>
 
+
+
 using namespace cv;
 //typedef vector<string> vstrings;
 //typedef  folders;
@@ -29,9 +31,11 @@ int main()
     */
 
     ///SETUP
-    trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROI/",true);
+    trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROIsmall/",true);
     t.process1C();
-    Mat training_Data= t.getTrainingMat();
+    t.multiclassTrain();
+
+
 //    uchar* ypixel = training_Data.ptr<uchar>(0);
 //    for (int j=0 ; j<training_Data.cols ; j+=1)
 //    {
