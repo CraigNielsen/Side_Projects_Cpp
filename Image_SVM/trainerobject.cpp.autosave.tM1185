@@ -67,9 +67,6 @@ void trainerObject::process1C()
         labelnames.push_back(Pair(klass,i->first));
         labelArray.push_back(klass);
         labelnm[klass]=i->first;
-
-
-
     }
     //create labels automatically
     //create a pointer to the start of the vector (the reference to its first element) This is an array
@@ -122,114 +119,13 @@ void trainerObject::get1DFeatureRow(string  path, Mat & dest, int row_to_change)
     int ii = 0; // Current column in training_mat
     const char * c = path.c_str();
     Mat img_mat=imread(c,CV_LOAD_IMAGE_GRAYSCALE);
-
-//    namedWindow("get",2);
-//    imshow("get",img_mat);
-//    waitKey(0);
-
+    im
+    namedWindow("get",2);
+    imshow("get",img_mat);
+    waitKey(0);
     Mat featureRow(1,img_mat.cols*img_mat.rows*img_mat.channels(),CV_32FC1);
     if (img_mat.channels()>1){cout<<"this is a 3 channel image, please use the 3C function instead"<<endl;return ;}
-
 //    for (int i = 0; i<img_mat.rows; i++) {
 //        for (int j = 0; j < img_mat.cols; j++)
 //        {
-//            featureRow.at<float>(0,ii++) = (float)img_mat.at<Vec3b>(i,j)[0];
-//        }
-//    }
-    uchar p;
-    uchar* opixel = featureRow.ptr<uchar>(0);
-    for (int i=0; i<img_mat.rows ; i+=1)
-    {
-        uchar* pixel = img_mat.ptr<uchar>(i);
-
-
-        for (int j=0 ; j<img_mat.cols ; j+=1)
-        {
-            (*opixel++)= pixel[j];
-//            cout<<(float)pixel[j]<<endl;
-
-        }
-    }
-    uchar* ypixel = featureRow.ptr<uchar>(0);
-//    for (int j=0 ; j<featureRow.cols ; j+=1)
-//    {
-//        cout<<(float)ypixel[j]<<endl;
-
-//    }
-
-featureRow.row(0).copyTo(dest.row(row_to_change));
-
-}
-
-void trainerObject::get3DFeatureRow(string  path, Mat & dest, int row_to_change)
-{
-/*
-    reads image
-    creates feature row
-    adds feature row to training data Mat
-    adds a pair to labelnames
- * */
-
-    int ii = 0; // Current column in training_mat
-    Mat img_mat=imread(path);
-    namedWindow("get",2);
-    imshow("get",img_mat);
-//    waitKey(0);
-    Mat featureRow(1,img_mat.cols*img_mat.rows*img_mat.channels(),CV_32FC1);
-    for (int i = 0; i<img_mat.rows; i++) {
-        for (int j = 0; j < img_mat.cols; j++) {
-            featureRow.at<float>(0,ii++) = (float)img_mat.at<Vec3b>(i,j)[0];
-            featureRow.at<float>(0,ii++) = (float)img_mat.at<Vec3b>(i,j)[1];
-            featureRow.at<float>(0,ii++) = (float)img_mat.at<Vec3b>(i,j)[2];
-            if (i==j && i==2){
-            cout<<"B1: "<<(float)img_mat.at<Vec3b>(i,j)[0]<<endl;
-            cout<<"G1: "<<(float)img_mat.at<Vec3b>(i,j)[1]<<endl;
-            cout<<"R1: "<<(float)img_mat.at<Vec3b>(i,j)[2]<<endl;
-        }}
-    }
-
-
-featureRow.row(0).copyTo(dest.row(row_to_change));
-}
-void trainerObject::makeFeatureRow(Mat & src_, Mat &dest_){
-
-    /*
-        reads image
-        creates feature row
-        adds feature row to training data Mat
-        adds a pair to labelnames
-     * */
-    Mat *poes= new Mat(src_.rows,src_.cols,CV_32FC1);
-    *poes=src_.clone();
-//    Mat src_0= imread("/home/craig/scripts/temp/0 fuck.jpg");
-//    *poes=src_0.clone();
-    namedWindow("make",2);
-    imshow("make",src_);
-//    waitKey(0);
-
-    int ii = 0; // Current column in training_mat
-    Mat featureRow2(1,src_.cols*src_.rows*src_.channels(),CV_32FC1);
-    for (int i = 0; i<src_.rows; i++) {
-        for (int j = 0; j < src_.cols; j++) {
-            featureRow2.at<float>(0,ii++) =(float) (*poes).at<Vec3b>(i,j)[0];
-            featureRow2.at<float>(0,ii++) =(float) (*poes).at<Vec3b>(i,j)[1];
-            featureRow2.at<float>(0,ii++) =(float) (*poes).at<Vec3b>(i,j)[2];
-            if (i==j && i==2){
-            cout<<"B3: "<<(float)(*poes).at<Vec3b>(i,j)[0]<<endl;
-            cout<<"G3: "<<(float)(*poes).at<Vec3b>(i,j)[1]<<endl;
-            cout<<"R3: "<<(float)(*poes).at<Vec3b>(i,j)[2]<<endl;
-        }}
-    }
-    delete poes;
-
-    featureRow2.row(0).copyTo(dest_.row(0));
-}
-
-string trainerObject::getClass(int i,bool ShowAllClasses )
-{
-    if (ShowAllClasses){
-        for (auto & i : labelnm){
-            cout<<i.first<<" "<<i.second<<endl;
-        }}
-    return labelnm[i];
-}
+//            featureRow.at<float>(0,ii++) = (float)img_mat.at

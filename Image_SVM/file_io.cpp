@@ -43,7 +43,7 @@ map<string,int> file_IO::getDirectoryFiles(char* dir, unordered_multimap<string,
     if (printout_){cout<<"no. of classes: "<<foldercount<<endl;  cout<<"no. of files: "<<filecount<<endl;}
     //find image area
 //    string loc = path+file;
-    Mat test=imread(path+"/"+file);
+    Mat test=imread(path+"/"+file,CV_LOAD_IMAGE_GRAYSCALE);
     int area=test.cols*test.rows;
     int channels=test.channels();
     map<string,int> info;

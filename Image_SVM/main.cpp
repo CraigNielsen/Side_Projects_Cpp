@@ -29,8 +29,17 @@ int main()
     */
 
     ///SETUP
-    trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROI",true);
+    trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROI/",true);
     t.process1C();
+    Mat training_Data= t.getTrainingMat();
+//    uchar* ypixel = training_Data.ptr<uchar>(0);
+//    for (int j=0 ; j<training_Data.cols ; j+=1)
+//    {
+//        uchar* ypixel = training_Data.ptr<uchar>(0);
+//        cout<<(float)ypixel[j]<<endl;
+//        waitKey(10);
+//    }
+
 //    t.io.print(t.labelnm);
 //    Mat proc=imread("/home/craig/QT/scripts/training/50/1.jpg");
 
