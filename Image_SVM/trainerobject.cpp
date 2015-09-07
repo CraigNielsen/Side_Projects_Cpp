@@ -245,8 +245,7 @@ void trainerObject::multiclassTrain()
 
 
     // ----------------------------------------------------------------------------------------
-    Mat out= training_Data.row(0);
-    printoutMatrix(out);
+
 
     void generate_data (
         std::vector<sample_type>& samples,
@@ -261,7 +260,7 @@ void trainerObject::multiclassTrain()
 
 //        generate_data(samples, labels); function from original example
 
-        convertMat2Dlib(training_Data,samples);
+        convertMat2Dlib(training_Data,samples,labels);
 
         cout << "samples.size() is: "<< samples.size() << endl;
 
@@ -430,7 +429,7 @@ void trainerObject::printoutMatrix(Mat &in_)
 }
 
 
-void trainerObject::convertMat2Dlib(Mat &src_, std::vector<dlib::matrix<double, tImageCols, 1> > &dst)
+void trainerObject::convertMat2Dlib(Mat &src_, std::vector<dlib::matrix<double, tImageCols, 1> > &dst, std::vector<double>& labels )
 {
     //create a m type to pass to the matrix
     dlib::matrix<double,tImageCols,1> m;
@@ -445,7 +444,14 @@ void trainerObject::convertMat2Dlib(Mat &src_, std::vector<dlib::matrix<double, 
             float p=(float)pixel[j];
             m(j)=p;
         }
+//        for (int k =0 ; k< tImageCols;k++)
+//        {
+//            cout<< "mk: "<<m(k) << "labels is: "<<labelArray[i] <<endl;
+
+//        }
         dst.push_back(m);
+        labels.push_back(labelArray[i] + 1);
+
 
     }
     // each row is copied into the dlib vector

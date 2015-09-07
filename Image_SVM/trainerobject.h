@@ -36,7 +36,7 @@ class trainerObject
 
 public:
     //===============================       SETTINGS
-    static const int tImageCols=25;
+    static const int tImageCols=100;
 
     //++++++++++++++++++++++++++++++++++++++++++++++
     umm_dirs umm_dir;
@@ -68,7 +68,7 @@ public:
     void makeFeatureRow(Mat &src_, Mat &dest_);
     void multiclassTrain();
     void printoutMatrix(Mat & in_);
-    void convertMat2Dlib(Mat & src_, std::vector<dlib::matrix<double,tImageCols,1>> & dst);
+    void convertMat2Dlib(Mat & src_, std::vector<dlib::matrix<double,tImageCols,1>> & dst, std::vector<double> &labels);
 private:
 
     char* dir;
