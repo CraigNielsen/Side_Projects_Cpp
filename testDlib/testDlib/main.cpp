@@ -39,6 +39,20 @@ void generate_data (
 !*/
 
 // ----------------------------------------------------------------------------------------
+int main()
+{
+    typedef one_vs_one_trainer<any_trainer<sample_type> > ovo_trainer;
+    typedef polynomial_kernel<sample_type> poly_kernel;
+    typedef radial_basis_kernel<sample_type> rbf_kernel;
+    one_vs_one_decision_function<ovo_trainer,
+    decision_function<poly_kernel>,  // This is the output of the poly_trainer
+    decision_function<rbf_kernel>    // This is the output of the rbf_trainer
+    >  df3;
+
+    deserialize("df.dat") >> df3;
+
+    cout << "predicted label: "<< df3(samples[0])  << ", true label: "<< labels[0] << endl;
+}
 
 int main()
 {
@@ -48,7 +62,7 @@ int main()
         std::vector<double> labels;
 
         // First, get our labeled set of training data
-        generate_data(samples, labels);
+//        generate_data(samples, labels);
 
         cout << "samples.size(): "<< samples.size() << endl;
 
@@ -118,18 +132,7 @@ int main()
         // would store it into a one_vs_one_decision_function.
         one_vs_one_decision_function<ovo_trainer> df = trainer.train(samples, labels);
         sample_type m;
-        m(0)=0;
-        m(1)=255;
-        m(2)=255;
-        m(3)=0;
-        m(4)=255;
-        m(5)=0;
-        m(6)=0;
-        m(7)=255;
-        m(8)=0;
-        m(9)=255;
-        m(10)=255;
-        m(11)=0;
+
         cout << "predicted label: "<< df(m)  << ", true label: "<< 1 << endl;
         cout << "predicted label: "<< df(samples[90]) << ", true label: "<< labels[90] << endl;
         // The output is:
