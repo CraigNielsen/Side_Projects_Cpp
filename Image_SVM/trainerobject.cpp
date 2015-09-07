@@ -361,6 +361,11 @@ void trainerObject::multiclassTrain()
         cout << endl;
         cout << "predicted label: "<< df3(samples[0])  << ", true label: "<< labels[0] << endl;
         cout << "predicted label: "<< df3(samples[90]) << ", true label: "<< labels[90] << endl;
+        cout << "predicted label: "<< df3(samples[80]) << ", true label: "<< labels[80] << endl;
+        cout << "predicted label: "<< df3(samples[70]) << ", true label: "<< labels[70] << endl;
+        cout << "predicted label: "<< df3(samples[60]) << ", true label: "<< labels[60] << endl;
+        cout << "predicted label: "<< df3(samples[50]) << ", true label: "<< labels[50] << endl;
+        cout << "predicted label: "<< df3(samples[40]) << ", true label: "<< labels[40] << endl;
         // Test df3 on the samples and labels and print the confusion matrix.
         cout << "test deserialized function: \n" << dlib::test_multiclass_decision_function(df3, samples, labels) << endl;
 

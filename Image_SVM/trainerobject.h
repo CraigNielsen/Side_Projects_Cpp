@@ -38,7 +38,9 @@ public:
     //===============================       SETTINGS
     static const int tImageCols=100;
 
-    //++++++++++++++++++++++++++++++++++++++++++++++
+
+    //__________________________________________
+
     umm_dirs umm_dir;
     file_IO io;
     Mat training_Data,featureRowSize;
