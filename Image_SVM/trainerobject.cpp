@@ -331,8 +331,9 @@ void trainerObject::multiclassTrain()
         dlib::one_vs_one_decision_function<ovo_trainer> df = trainer.train(samples, labels);
         sample_type m;
 
-        cout << "predicted label: "<< df(m)  << ", true label: "<< 1 << endl;
-        cout << "predicted label: "<< df(samples[90]) << ", true label: "<< labels[90] << endl;
+        cout << "predicted label: "<< df(samples[0])   << ", true label: "<< labels[0] << endl;
+        cout << "predicted label: "<< df(samples[1])   << ", true label: "<< labels[1] << endl;
+        cout << "predicted label: "<< df(samples[10]) << ", true label: "<< labels[10] << endl;
         // The output is:
         /*
             predicted label: 2, true label: 2
@@ -351,15 +352,19 @@ void trainerObject::multiclassTrain()
         // Put df into df2 and then save df2 to disk.  Note that we could have also said
         // df2 = trainer.train(samples, labels);  But doing it this way avoids retraining.
         df2 = df;
-        dlib::serialize("df.dat") << df2;
+        dlib::serialize("df2.dat") << df2;
 
         // load the function back in from disk and store it in df3.
-        dlib::deserialize("df.dat") >> df3;
+        dlib::deserialize("df2.dat") >> df3;
 
 
         // Test df3 to see that this worked.
         cout << endl;
         cout << "predicted label: "<< df3(samples[0])  << ", true label: "<< labels[0] << endl;
+        cout << "predicted label: "<< df3(samples[1])  << ", true label: "<< labels[1] << endl;
+        cout << "predicted label: "<< df3(samples[2])  << ", true label: "<< labels[2] << endl;
+        cout << "predicted label: "<< df3(samples[3])  << ", true label: "<< labels[3] << endl;
+        cout << "predicted label: "<< df3(samples[4])  << ", true label: "<< labels[4] << endl;
         cout << "predicted label: "<< df3(samples[90]) << ", true label: "<< labels[90] << endl;
         cout << "predicted label: "<< df3(samples[80]) << ", true label: "<< labels[80] << endl;
         cout << "predicted label: "<< df3(samples[70]) << ", true label: "<< labels[70] << endl;
@@ -390,6 +395,64 @@ void trainerObject::multiclassTrain()
         // them back into the concrete type.  If you make a mistake and try to any_cast a
         // binary decision function into the wrong type of function any_cast will throw a
         // bad_any_cast exception.
+    }
+    catch (std::exception& e)
+    {
+        cout << "exception thrown!" << endl;
+        cout << e.what() << endl;
+    }
+}
+
+void trainerObject::multiclassTest()
+{
+    typedef dlib::matrix<double,tImageCols,1> sample_type; //tImagecols is set in header,,no of columns in the training image..ie the individual training image area
+
+    try
+    {
+        std::vector<sample_type> samples;
+        std::vector<double> labels;
+        convertMat2Dlib(training_Data,samples,labels);
+
+        typedef dlib::one_vs_one_trainer<dlib::any_trainer<sample_type> > ovo_trainer;
+        typedef dlib::polynomial_kernel<sample_type> poly_kernel;
+        typedef dlib::radial_basis_kernel<sample_type> rbf_kernel;
+
+        // make the binary trainers and set some parameters
+        dlib::krr_trainer<rbf_kernel> rbf_trainer;
+        dlib::svm_nu_trainer<poly_kernel> poly_trainer;
+        poly_trainer.set_kernel(poly_kernel(0.1, 1, 2));
+        rbf_trainer.set_kernel(rbf_kernel(0.1));
+
+
+
+        // If you want to save a one_vs_one_decision_function to disk, you can do
+        // so.  However, you must declare what kind of decision functions it contains.
+        dlib::one_vs_one_decision_function<ovo_trainer,
+        dlib::decision_function<poly_kernel>,  // This is the output of the poly_trainer
+        dlib::decision_function<rbf_kernel>    // This is the output of the rbf_trainer
+        > df3;
+
+
+        // load the function back in from disk and store it in df3.
+        dlib::deserialize("df2.dat") >> df3;
+
+
+        // Test df3 to see that this worked.
+        cout << endl;
+        cout << "predicted label: "<< df3(samples[0])  << ", true label: "<< labels[0] << endl;
+        cout << "predicted label: "<< df3(samples[1])  << ", true label: "<< labels[1] << endl;
+        cout << "predicted label: "<< df3(samples[2])  << ", true label: "<< labels[2] << endl;
+        cout << "predicted label: "<< df3(samples[3])  << ", true label: "<< labels[3] << endl;
+        cout << "predicted label: "<< df3(samples[4])  << ", true label: "<< labels[4] << endl;
+        cout << "predicted label: "<< df3(samples[90]) << ", true label: "<< labels[90] << endl;
+        cout << "predicted label: "<< df3(samples[80]) << ", true label: "<< labels[80] << endl;
+        cout << "predicted label: "<< df3(samples[70]) << ", true label: "<< labels[70] << endl;
+        cout << "predicted label: "<< df3(samples[60]) << ", true label: "<< labels[60] << endl;
+        cout << "predicted label: "<< df3(samples[50]) << ", true label: "<< labels[50] << endl;
+        cout << "predicted label: "<< df3(samples[40]) << ", true label: "<< labels[40] << endl;
+        // Test df3 on the samples and labels and print the confusion matrix.
+        cout << "test deserialized function: \n" << dlib::test_multiclass_decision_function(df3, samples, labels) << endl;
+
     }
     catch (std::exception& e)
     {

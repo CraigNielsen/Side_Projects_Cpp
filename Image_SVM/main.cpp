@@ -34,6 +34,7 @@ int main()
     trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROIsmall/",true);
     t.process1C();
     t.multiclassTrain();
+    t.multiclassTest();
 
 
 //    uchar* ypixel = training_Data.ptr<uchar>(0);

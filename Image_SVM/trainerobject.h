@@ -69,6 +69,7 @@ public:
     void save(string dir_);
     void makeFeatureRow(Mat &src_, Mat &dest_);
     void multiclassTrain();
+    void multiclassTest();
     void printoutMatrix(Mat & in_);
     void convertMat2Dlib(Mat & src_, std::vector<dlib::matrix<double,tImageCols,1>> & dst, std::vector<double> &labels);
 private:
