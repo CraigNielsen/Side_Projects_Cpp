@@ -30,11 +30,16 @@ int main()
      *
     */
 
-    ///SETUP
+//    ///SETUP for FIRST training.. using the image in the SVM
+//    trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROIsmall/",true);
+//    t.process1C();
+//    t.multiclassTrain();
+////    t.multiclassTest();
+
+    ///SETUP for SECOND training.. using the functions to build features for the vector
     trainerObject t=trainerObject("/home/craig/Pictures/training_images/BW_ROIsmall/",true);
-    t.process1C();
     t.multiclassTrain();
-    t.multiclassTest();
+//        t.multiclassTest();
 
 
 //    uchar* ypixel = training_Data.ptr<uchar>(0);

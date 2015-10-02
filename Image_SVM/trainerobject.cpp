@@ -238,10 +238,14 @@ string trainerObject::getClass(int i,bool ShowAllClasses )
 //______________________________________________________________________________TRAINING
 
 void trainerObject::multiclassTrain()
+///choose v1 or v2 for version
 {
     // Our data will be 2-dimensional data. So declare an appropriate type to contain these points.
 
-    typedef dlib::matrix<double,tImageCols,1> sample_type; //tImagecols is set in header,,no of columns in the training image..ie the individual training image area
+//    typedef dlib::matrix<double,tImageCols,1> sample_type; //tImagecols is set in header,,no of columns in the training image..ie the individual training image area
+
+
+        typedef dlib::matrix<double,4,1> sample_type; //tImagecols is set in header,,no of columns in the training image..ie the individual training image area
 
 
     // ----------------------------------------------------------------------------------------
@@ -258,9 +262,16 @@ void trainerObject::multiclassTrain()
 
         // First, get our labeled set of training data
 
-//        generate_data(samples, labels); function from original example
+        //        generate_data(samples, labels); function from original example
 
-        convertMat2Dlib(training_Data,samples,labels);
+
+        ///______________FIRST VERSION IS MUTED
+        //            convertMat2Dlib(training_Data,samples,labels);
+
+
+        generate_feature_vector(labels,samples);
+
+
 
         cout << "samples.size() is: "<< samples.size() << endl;
 
@@ -352,10 +363,10 @@ void trainerObject::multiclassTrain()
         // Put df into df2 and then save df2 to disk.  Note that we could have also said
         // df2 = trainer.train(samples, labels);  But doing it this way avoids retraining.
         df2 = df;
-        dlib::serialize("df2.dat") << df2;
+        dlib::serialize("df3.dat") << df2;
 
         // load the function back in from disk and store it in df3.
-        dlib::deserialize("df2.dat") >> df3;
+        dlib::deserialize("df3.dat") >> df3;
 
 
         // Test df3 to see that this worked.
@@ -385,8 +396,8 @@ void trainerObject::multiclassTrain()
         cout << "number of binary decision functions in df: " << functs.size() << endl;
         // The functs object is a std::map which maps pairs of labels to binary decision
         // functions.  So we can access the individual decision functions like so:
-        dlib::decision_function<poly_kernel> df_1_2 = dlib::any_cast<dlib::decision_function<poly_kernel> >(functs[dlib::make_unordered_pair(1,2)]);
-        dlib::decision_function<rbf_kernel>  df_1_3 = dlib::any_cast<dlib::decision_function<rbf_kernel>  >(functs[dlib::make_unordered_pair(1,3)]);
+//        dlib::decision_function<poly_kernel> df_1_2 = dlib::any_cast<dlib::decision_function<poly_kernel> >(functs[dlib::make_unordered_pair(1,2)]);
+//        dlib::decision_function<rbf_kernel>  df_1_3 = dlib::any_cast<dlib::decision_function<rbf_kernel>  >(functs[dlib::make_unordered_pair(1,3)]);
         // df_1_2 contains the binary decision function that votes for class 1 vs. 2.
         // Similarly, df_1_3 contains the classifier that votes for 1 vs. 3.
 
@@ -524,5 +535,113 @@ void trainerObject::convertMat2Dlib(Mat &src_, std::vector<dlib::matrix<double, 
     }
     // each row is copied into the dlib vector
 
+}
+int trainerObject::yLocationLeft(Mat & image)
+{
+    //for each column starting left, count non-zero.
+    //when not == zero, that is the left most column.
+    //search for the top white pixel in that column using the returned count non zero value
+    //iterate through the white pixels in the column until until find white pixel
+
+    for ( int i =0 ; i < image.cols; i++)
+    {
+        if (cv::countNonZero(image.col(i))>0)
+        {
+            for (int j=0;j<image.rows;j++)
+            {
+                if (image.at<uchar>(j,i)==255)
+                {
+                    return j;
+                }
+            }
+        }
+    }
+}
+int trainerObject::leftRowWhiteCount(Mat & image)
+{
+    ///cannot pass image without white pixels
+
+    //for each column starting left, count non-zero.
+    //when not == zero, that is the left most column.
+    //count all white pixels in that column
+    int x = 0;
+    for ( int i =0 ; i < image.cols; i++)
+    {
+        x=countNonZero(image.col(i));
+        if (x>0)
+        {
+            return x;
+        }
+    }
+}
+int trainerObject::yLocationRight(Mat & image)
+{
+    //for each column starting right, count non-zero.
+    //when not == zero, that is the left most column.
+    //search for the top white pixel in that column using the returned count non zero value
+    //iterate through the white pixels in the column until until find white pixel
+
+    for ( int i =image.cols-1 ; i >= 0; i--)
+    {
+
+        if (countNonZero(image.col(i))>0)
+        {
+            for (int j=0;j<image.rows;j++)
+            {
+                if (image.at<uchar>(j,i)==255)
+                {
+                    return j;
+                }
+            }
+        }
+    }
+}
+void trainerObject::generate_feature_vector(std::vector<double> &labels, std::vector<dlib::matrix<double, 4, 1> > & samples)
+{
+    //specifically for TSR application
+    //DIRECTORY MUST CONTAIN SINGLE CHANNEL IMAGES!!
+    // go through directory,
+    ///create feature vector for each image
+    /// pass the vector to the samples
+    /// give the corresponding labels in the label vector
+    typedef dlib::matrix<double,4,1> sample_type;
+    fileNumber=-1;
+    //setup variables for class counting
+    string changedFolder=umm_dir.begin()->first;
+    sample_type m;
+    int classNo=0;
+    int row=0;
+    /// iterate through the directory
+    /// add the directory name as a label
+    /// find each feature using given functions
+    /// create feature row and add it to samples vector
+
+
+    for (auto i = umm_dir.begin(); i != umm_dir.end();i++,row+=1){
+        string path= ((string)dir +"/"+ i->first+"/"+i->second);
+        //create feature row here for each image
+
+
+        //check if folder changed. handle the naming
+        if (i->first != changedFolder){
+            changedFolder=i->first;
+            classNo+=1;
+        }
+        Mat imageNow=imread(path,CV_LOAD_IMAGE_GRAYSCALE);
+        imageNow=imageNow>80;
+        m(0)=yLocationLeft(imageNow);
+        m(1)=yLocationRight(imageNow);
+        m(2)=leftRowWhiteCount(imageNow);
+        m(3)=countNonZero(imageNow)*100 / (imageNow.rows*imageNow.cols);
+        cout<<classNo<< " "<<m(0)<<" "<<m(1)<<" "<<m(2)<<" "<<m(3)<<endl;
+        // add this sample to our set of training samples
+        samples.push_back(m);
+        labels.push_back(classNo);
+        //add labels for the new feature row
+        labelnames.push_back(Pair(classNo,i->first));
+        labelArray.push_back(classNo);
+        labelnm[classNo]=i->first;
+
+    }
 }
 

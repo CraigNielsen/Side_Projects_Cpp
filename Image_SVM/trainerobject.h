@@ -72,6 +72,10 @@ public:
     void multiclassTest();
     void printoutMatrix(Mat & in_);
     void convertMat2Dlib(Mat & src_, std::vector<dlib::matrix<double,tImageCols,1>> & dst, std::vector<double> &labels);
+    void generate_feature_vector(std::vector<double> & labels, std::vector<dlib::matrix<double, 4, 1> > &samples);
+    int yLocationRight(Mat & image);
+    int leftRowWhiteCount(Mat & image);
+    int yLocationLeft(Mat & image);
 private:
 
     char* dir;
